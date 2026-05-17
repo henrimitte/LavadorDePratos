@@ -22,10 +22,10 @@ public class App {
 
 	private static final Logger logger = Logger.getLogger(App.class.getName());
 
-	private static final int TEMPO_TRABALHANDO_MS = 2000;
-	private static final int MAX_PRATOS = 1000;
-	private static final int QTD_LAVADORES = 10;
-	private static final int QTD_ENXUGADORES = 9;
+	private static final int TEMPO_TRABALHANDO_MS = 1000;
+	private static final int MAX_PRATOS = 10;
+	private static final int QTD_LAVADORES = 1;
+	private static final int QTD_ENXUGADORES = 1;
 
 	private static Escorredor escorredor;
 	private static Thread[] lavadores;
