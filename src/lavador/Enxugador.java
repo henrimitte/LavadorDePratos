@@ -27,7 +27,7 @@ public class Enxugador implements Runnable {
 
 	@Override
 	public void run() {
-		logger.info("Enxugador iniciou...");
+		logger.fine(this + " iniciou...");
 
 		Prato prato = null;
 
@@ -40,7 +40,7 @@ public class Enxugador implements Runnable {
 			}
 		}
 
-		logger.info("Enxugador terminou!");
+		logger.fine(this + " terminou!");
 	}
 
 	public void enxugar(Prato prato) throws Exception {

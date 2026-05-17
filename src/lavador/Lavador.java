@@ -26,7 +26,7 @@ public class Lavador implements Runnable {
 
 	@Override
 	public void run() {
-		logger.info("Lavador iniciou...");
+		logger.fine(this + " iniciou...");
 
 		Prato prato = null;
 
@@ -39,7 +39,7 @@ public class Lavador implements Runnable {
 			}
 		}
 
-		logger.info("Lavador terminou!");
+		logger.fine(this + " terminou!");
 	}
 
 	private void lavar(Prato prato) throws Exception {

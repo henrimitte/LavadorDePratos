@@ -36,7 +36,6 @@ public class Escorredor {
 			logger.finer("Inserindo " + prato);
 
 			if (ocupacao == 1) {
-				logger.finest("Tem prato novo, notificando Enxugadores...");
 				notifyAll();
 			} else if (isCheio()) {
 				logger.info("Escorredor CHEIO. Pratos = " + ocupacao);
@@ -65,7 +64,6 @@ public class Escorredor {
 			logger.finer("Retirando " + prato);
 
 			if (ocupacao == (maxPratos - 1)) {
-				logger.finest("Vagou espaço, notificando Lavadores...");
 				notifyAll();
 			} else if (isVazio()) {
 				logger.info("Escorredor VAZIO. Pratos = " + ocupacao);
