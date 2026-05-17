@@ -50,13 +50,9 @@ public class App {
 		lavadores = new Thread[QTD_LAVADORES];
 		enxugadores = new Thread[QTD_ENXUGADORES];
 
-		for (int i = 0; i < QTD_LAVADORES; i++) {
-			lavadores[i] = new Thread(new Lavador(escorredor, trabalhando));
-		}
+		for (int i = 0; i < QTD_LAVADORES; i++) lavadores[i] = new Thread(new Lavador(escorredor, trabalhando));
 
-		for (int i = 0; i < QTD_ENXUGADORES; i++) {
-			enxugadores[i] = new Thread(new Enxugador(escorredor, trabalhando));
-		}
+		for (int i = 0; i < QTD_ENXUGADORES; i++) enxugadores[i] = new Thread(new Enxugador(escorredor, trabalhando));
 	}
 
 	private static void work() {
@@ -64,13 +60,9 @@ public class App {
 
 		trabalhando.set(true);
 
-		for (Thread lavador : lavadores) {
-			lavador.start();
-		}
+		for (Thread lavador : lavadores) lavador.start();
 
-		for (Thread enxugador : enxugadores) {
-			enxugador.start();
-		}
+		for (Thread enxugador : enxugadores) enxugador.start();
 
 	}
 
@@ -81,13 +73,9 @@ public class App {
 			escorredor.notifyAll();
 		}
 
-		for (Thread lavador : lavadores) {
-			lavador.join();
-		}
+		for (Thread lavador : lavadores) lavador.join();
 
-		for (Thread enxugador : enxugadores) {
-			enxugador.join();
-		}
+		for (Thread enxugador : enxugadores) enxugador.join();
 
 		logger.info("Turno finalizado!");
 	}

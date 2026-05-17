@@ -21,7 +21,7 @@ public class Lavador implements Runnable {
 		this.escorredor = escorredor;
 		this.trabalhando = trabalhando;
 
-		this.numSerie = ++Lavador.contador;
+		numSerie = ++Lavador.contador;
 	}
 
 	@Override

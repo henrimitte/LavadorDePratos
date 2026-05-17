@@ -22,7 +22,7 @@ public class Enxugador implements Runnable {
 		this.escorredor = escorredor;
 		this.trabalhando = trabalhando;
 
-		this.numSerie = ++Enxugador.contador;
+		numSerie = ++Enxugador.contador;
 	}
 
 	@Override
@@ -31,18 +31,15 @@ public class Enxugador implements Runnable {
 
 		Prato prato = null;
 
-		while (trabalhando.get()) {
-
-			try {
-				prato = escorredor.retirar();
-				enxugar(prato);
-			} catch (ArrayIndexOutOfBoundsException e) {
-				logger.severe("Limites do escorredor foram violados. Encerrando o programa.");
-				System.exit(1);
-			} catch (Exception e) {
-				logger.severe("Ocorreu um erro. Encerrando o programa.");
-				System.exit(1);
-			}
+		while (trabalhando.get()) try {
+			prato = escorredor.retirar();
+			enxugar(prato);
+		} catch (ArrayIndexOutOfBoundsException e) {
+			logger.severe("Limites do escorredor foram violados. Encerrando o programa.");
+			System.exit(1);
+		} catch (Exception e) {
+			logger.severe("Ocorreu um erro. Encerrando o programa.");
+			System.exit(1);
 		}
 
 		logger.fine(this + " terminou!");

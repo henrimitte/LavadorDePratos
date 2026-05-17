@@ -12,9 +12,9 @@ public class Escorredor {
 
 	private AtomicBoolean trabalhando;
 
-	public Escorredor(int max_pratos, AtomicBoolean trabalhando) {
-		this.maxPratos = max_pratos;
-		this.pratos = new Prato[max_pratos];
+	public Escorredor(int maxPratos, AtomicBoolean trabalhando) {
+		this.maxPratos = maxPratos;
+		pratos = new Prato[maxPratos];
 
 		this.trabalhando = trabalhando;
 	}
@@ -22,9 +22,7 @@ public class Escorredor {
 	public void inserir(Prato prato) throws Exception {
 		synchronized (this) {
 
-			while (isCheio() && trabalhando.get()) {
-				this.wait();
-			}
+			while (isCheio() && trabalhando.get()) this.wait();
 
 			pratos[fim] = prato;
 			ocupacao++;
@@ -33,9 +31,8 @@ public class Escorredor {
 
 			logger.finer("Inserindo " + prato);
 
-			if (ocupacao == 1) {
-				notifyAll();
-			} else if (isCheio()) {
+			if (ocupacao == 1) notifyAll();
+			else if (isCheio()) {
 				logger.info("Escorredor CHEIO. Pratos = " + ocupacao);
 				notifyAll();
 			}
@@ -47,9 +44,7 @@ public class Escorredor {
 
 		synchronized (this) {
 
-			while (isVazio() && trabalhando.get()) {
-				this.wait();
-			}
+			while (isVazio() && trabalhando.get()) this.wait();
 
 			prato = pratos[inicio];
 			pratos[inicio] = null;
@@ -59,9 +54,8 @@ public class Escorredor {
 
 			logger.finer("Retirando " + prato);
 
-			if (ocupacao == (maxPratos - 1)) {
-				notifyAll();
-			} else if (isVazio()) {
+			if (ocupacao == maxPratos - 1) notifyAll();
+			else if (isVazio()) {
 				logger.info("Escorredor VAZIO. Pratos = " + ocupacao);
 				notifyAll();
 			}
