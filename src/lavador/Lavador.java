@@ -35,7 +35,12 @@ public class Lavador implements Runnable {
 			try {
 				lavar(prato);
 				escorredor.inserir(prato);
+			} catch (ArrayIndexOutOfBoundsException e) {
+				logger.severe("Limites do escorredor foram violados. Encerrando o programa.");
+				System.exit(1);
 			} catch (Exception e) {
+				logger.severe("Ocorreu um erro. Encerrando o programa.");
+				System.exit(1);
 			}
 		}
 
