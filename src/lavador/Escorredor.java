@@ -21,8 +21,8 @@ public class Escorredor {
 
 	public void inserir(Prato prato) throws Exception {
 		synchronized (this) {
+
 			while (isCheio() && trabalhando.get()) {
-				logger.info("Escorredor CHEIO. Pratos = " + ocupacao);
 				this.wait();
 			}
 
@@ -35,7 +35,13 @@ public class Escorredor {
 
 			logger.finer("Inserindo " + prato);
 
-			notifyAll();
+			if (ocupacao == 1) {
+				logger.finest("Tem prato novo, notificando Enxugadores...");
+				notifyAll();
+			} else if (isCheio()) {
+				logger.info("Escorredor CHEIO. Pratos = " + ocupacao);
+				notifyAll();
+			}
 		}
 	}
 
@@ -43,8 +49,8 @@ public class Escorredor {
 		Prato prato = null;
 
 		synchronized (this) {
+
 			while (isVazio() && trabalhando.get()) {
-				logger.info("Escorredor VAZIO. Pratos = " + ocupacao);
 				this.wait();
 			}
 
@@ -58,7 +64,13 @@ public class Escorredor {
 
 			logger.finer("Retirando " + prato);
 
-			notifyAll();
+			if (ocupacao == (maxPratos - 1)) {
+				logger.finest("Vagou espaço, notificando Lavadores...");
+				notifyAll();
+			} else if (isVazio()) {
+				logger.info("Escorredor VAZIO. Pratos = " + ocupacao);
+				notifyAll();
+			}
 		}
 
 		return prato;
