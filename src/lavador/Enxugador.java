@@ -12,12 +12,17 @@ public class Enxugador implements Runnable {
 	private static final int TEMPO_MIN = 3;
 	private static final int TEMPO_MAX = 10;
 
+	private static int contador;
+	private int numSerie;
+
 	private Escorredor escorredor;
 	private AtomicBoolean trabalhando;
 
 	public Enxugador(Escorredor escorredor, AtomicBoolean trabalhando) {
 		this.escorredor = escorredor;
 		this.trabalhando = trabalhando;
+
+		this.numSerie = ++Enxugador.contador;
 	}
 
 	@Override
@@ -41,8 +46,13 @@ public class Enxugador implements Runnable {
 	public void enxugar(Prato prato) throws Exception {
 		int tempoEspera = randGen.nextInt(TEMPO_MIN, TEMPO_MAX + 1);
 
-		logger.fine("Enxugando " + prato);
+		logger.fine(this + " enxugando " + prato);
 
 		Thread.sleep(tempoEspera);
+	}
+
+	@Override
+	public String toString() {
+		return "Enxugador [" + numSerie + "]";
 	}
 }

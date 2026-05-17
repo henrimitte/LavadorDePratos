@@ -11,12 +11,17 @@ public class Lavador implements Runnable {
 	private static final int TEMPO_MEDIO = 5;
 	private static final int TEMPO_ENGORDURADO = 10;
 
+	private static int contador = 0;
+	private int numSerie;
+
 	private Escorredor escorredor;
 	private AtomicBoolean trabalhando;
 
 	public Lavador(Escorredor escorredor, AtomicBoolean trabalhando) {
 		this.escorredor = escorredor;
 		this.trabalhando = trabalhando;
+
+		this.numSerie = ++Lavador.contador;
 	}
 
 	@Override
@@ -33,7 +38,7 @@ public class Lavador implements Runnable {
 			} catch (Exception e) {
 			}
 		}
-		
+
 		logger.info("Lavador terminou!");
 	}
 
@@ -44,8 +49,13 @@ public class Lavador implements Runnable {
 		case NivelSujeira.ENGORDURADO -> TEMPO_ENGORDURADO;
 		};
 
-		logger.fine("Lavando " + prato);
+		logger.fine(this + " lavando " + prato);
 
 		Thread.sleep(tempoEspera);
+	}
+
+	@Override
+	public String toString() {
+		return "Lavador [" + numSerie + "]";
 	}
 }
