@@ -1,0 +1,51 @@
+package lavador;
+
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.logging.Logger;
+
+public class Lavador implements Runnable {
+
+	private static final Logger logger = Logger.getLogger(Lavador.class.getName());
+
+	private static final int TEMPO_BAIXO = 3;
+	private static final int TEMPO_MEDIO = 5;
+	private static final int TEMPO_ENGORDURADO = 10;
+
+	private Escorredor escorredor;
+	private AtomicBoolean trabalhando;
+
+	public Lavador(Escorredor escorredor, AtomicBoolean trabalhando) {
+		this.escorredor = escorredor;
+		this.trabalhando = trabalhando;
+	}
+
+	@Override
+	public void run() {
+		logger.info("Lavador iniciou...");
+
+		Prato prato = null;
+
+		while (trabalhando.get()) {
+			prato = Prato.getInstance();
+			try {
+				lavar(prato);
+				escorredor.inserir(prato);
+			} catch (Exception e) {
+			}
+		}
+		
+		logger.info("Lavador terminou!");
+	}
+
+	private void lavar(Prato prato) throws Exception {
+		int tempoEspera = switch (prato.getNivelSujeira()) {
+		case NivelSujeira.BAIXO -> TEMPO_BAIXO;
+		case NivelSujeira.MEDIO -> TEMPO_MEDIO;
+		case NivelSujeira.ENGORDURADO -> TEMPO_ENGORDURADO;
+		};
+
+		logger.fine("Lavando " + prato);
+
+		Thread.sleep(tempoEspera);
+	}
+}

@@ -1,0 +1,80 @@
+package lavador;
+
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.logging.Logger;
+
+public class Escorredor {
+
+	private static final Logger logger = Logger.getLogger(Escorredor.class.getName());
+
+	private int inicio = 0, fim = 0, ocupacao = 0, maxPratos;
+	private Prato[] pratos;
+
+	private AtomicBoolean trabalhando;
+
+	public Escorredor(int max_pratos, AtomicBoolean trabalhando) {
+		this.maxPratos = max_pratos;
+		this.pratos = new Prato[max_pratos];
+
+		this.trabalhando = trabalhando;
+	}
+
+	public void inserir(Prato prato) throws Exception {
+		synchronized (this) {
+			while (isCheio() && trabalhando.get()) {
+				logger.info("Escorredor CHEIO. Pratos = " + ocupacao);
+				this.wait();
+			}
+
+			pratos[fim] = prato;
+			ocupacao++;
+			fim++;
+			fim %= maxPratos;
+
+			checarLimites();
+
+			logger.finer("Inserindo " + prato);
+
+			notifyAll();
+		}
+	}
+
+	public Prato retirar() throws Exception {
+		Prato prato = null;
+
+		synchronized (this) {
+			while (isVazio() && trabalhando.get()) {
+				logger.info("Escorredor VAZIO. Pratos = " + ocupacao);
+				this.wait();
+			}
+
+			prato = pratos[inicio];
+			pratos[inicio] = null;
+			ocupacao--;
+			inicio++;
+			inicio %= maxPratos;
+
+			checarLimites();
+
+			logger.finer("Retirando " + prato);
+
+			notifyAll();
+		}
+
+		return prato;
+	}
+
+	private void checarLimites() {
+		if (ocupacao < 0 || ocupacao > maxPratos || inicio < 0 || inicio > maxPratos || fim < 0 || fim > maxPratos) {
+			throw new RuntimeException("Limites do escorredor foram violados.");
+		}
+	}
+
+	private boolean isVazio() {
+		return ocupacao == 0;
+	}
+
+	private boolean isCheio() {
+		return ocupacao == maxPratos;
+	}
+}
