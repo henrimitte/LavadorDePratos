@@ -31,7 +31,7 @@ public class App {
 	private static Thread[] lavadores;
 	private static Thread[] enxugadores;
 
-	private static AtomicBoolean trabalhando;
+	public static volatile boolean trabalhando;
 
 	public static void main(String[] args) throws Exception {
 		prepare();
@@ -44,21 +44,21 @@ public class App {
 	}
 
 	private static void prepare() {
-		trabalhando = new AtomicBoolean(false);
+		trabalhando = false;
 
-		escorredor = new Escorredor(MAX_PRATOS, trabalhando);
+		escorredor = new Escorredor(MAX_PRATOS);
 		lavadores = new Thread[QTD_LAVADORES];
 		enxugadores = new Thread[QTD_ENXUGADORES];
 
-		for (int i = 0; i < QTD_LAVADORES; i++) lavadores[i] = new Thread(new Lavador(escorredor, trabalhando));
+		for (int i = 0; i < QTD_LAVADORES; i++) lavadores[i] = new Thread(new Lavador(escorredor));
 
-		for (int i = 0; i < QTD_ENXUGADORES; i++) enxugadores[i] = new Thread(new Enxugador(escorredor, trabalhando));
+		for (int i = 0; i < QTD_ENXUGADORES; i++) enxugadores[i] = new Thread(new Enxugador(escorredor));
 	}
 
 	private static void work() {
 		logger.info("Iniciando turno...");
 
-		trabalhando.set(true);
+		trabalhando = true;
 
 		for (Thread lavador : lavadores) lavador.start();
 
@@ -67,7 +67,7 @@ public class App {
 	}
 
 	private static void stop() throws Exception {
-		trabalhando.set(false);
+		trabalhando = false;
 
 		synchronized (escorredor) {
 			escorredor.notifyAll();

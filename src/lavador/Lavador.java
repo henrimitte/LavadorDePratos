@@ -1,6 +1,5 @@
 package lavador;
 
-import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.logging.Logger;
 
 public class Lavador implements Runnable {
@@ -15,11 +14,9 @@ public class Lavador implements Runnable {
 	private int numSerie;
 
 	private Escorredor escorredor;
-	private AtomicBoolean trabalhando;
 
-	public Lavador(Escorredor escorredor, AtomicBoolean trabalhando) {
+	public Lavador(Escorredor escorredor) {
 		this.escorredor = escorredor;
-		this.trabalhando = trabalhando;
 
 		numSerie = ++Lavador.contador;
 	}
@@ -30,7 +27,7 @@ public class Lavador implements Runnable {
 
 		Prato prato = null;
 
-		while (trabalhando.get()) {
+		while (App.trabalhando) {
 			prato = PratosSujosFactory.getPratoSujo();
 			try {
 				lavar(prato);

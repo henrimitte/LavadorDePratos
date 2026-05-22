@@ -1,7 +1,6 @@
 package lavador;
 
 import java.util.Random;
-import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.logging.Logger;
 
 public class Enxugador implements Runnable {
@@ -16,11 +15,9 @@ public class Enxugador implements Runnable {
 	private int numSerie;
 
 	private Escorredor escorredor;
-	private AtomicBoolean trabalhando;
 
-	public Enxugador(Escorredor escorredor, AtomicBoolean trabalhando) {
+	public Enxugador(Escorredor escorredor) {
 		this.escorredor = escorredor;
-		this.trabalhando = trabalhando;
 
 		numSerie = ++Enxugador.contador;
 	}
@@ -31,7 +28,7 @@ public class Enxugador implements Runnable {
 
 		Prato prato = null;
 
-		while (trabalhando.get()) try {
+		while (App.trabalhando) try {
 			prato = escorredor.retirar();
 			enxugar(prato);
 		} catch (ArrayIndexOutOfBoundsException e) {

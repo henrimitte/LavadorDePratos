@@ -1,6 +1,5 @@
 package lavador;
 
-import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.logging.Logger;
 
 public class Escorredor {
@@ -10,19 +9,15 @@ public class Escorredor {
 	private int inicio = 0, fim = 0, ocupacao = 0, maxPratos;
 	private Prato[] pratos;
 
-	private AtomicBoolean trabalhando;
-
-	public Escorredor(int maxPratos, AtomicBoolean trabalhando) {
+	public Escorredor(int maxPratos) {
 		this.maxPratos = maxPratos;
 		pratos = new Prato[maxPratos];
-
-		this.trabalhando = trabalhando;
 	}
 
 	public void inserir(Prato prato) throws Exception {
 		synchronized (this) {
 
-			while (isCheio() && trabalhando.get()) this.wait();
+			while (isCheio() && App.trabalhando) this.wait();
 
 			pratos[fim] = prato;
 			ocupacao++;
@@ -44,7 +39,7 @@ public class Escorredor {
 
 		synchronized (this) {
 
-			while (isVazio() && trabalhando.get()) this.wait();
+			while (isVazio() && App.trabalhando) this.wait();
 
 			prato = pratos[inicio];
 			pratos[inicio] = null;
