@@ -30,7 +30,7 @@ public class Enxugador implements Runnable {
 
 		while (App.trabalhando) try {
 			prato = escorredor.retirar();
-			enxugar(prato);
+			if (prato != null) enxugar(prato);
 		} catch (ArrayIndexOutOfBoundsException e) {
 			logger.severe("Limites do escorredor foram violados. Encerrando o programa.");
 			System.exit(1);

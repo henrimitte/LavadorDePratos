@@ -19,6 +19,8 @@ public class Escorredor {
 
 			while (isCheio() && App.trabalhando) this.wait();
 
+			if (!App.trabalhando) return;
+
 			pratos[fim] = prato;
 			ocupacao++;
 			fim++;
@@ -40,6 +42,8 @@ public class Escorredor {
 		synchronized (this) {
 
 			while (isVazio() && App.trabalhando) this.wait();
+
+			if (!App.trabalhando) return null;
 
 			prato = pratos[inicio];
 			pratos[inicio] = null;
