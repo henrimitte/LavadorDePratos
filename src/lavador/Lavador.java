@@ -31,7 +31,7 @@ public class Lavador implements Runnable {
 		Prato prato = null;
 
 		while (trabalhando.get()) {
-			prato = Prato.getInstance();
+			prato = PratosSujosFactory.getPratoSujo();
 			try {
 				lavar(prato);
 				escorredor.inserir(prato);
