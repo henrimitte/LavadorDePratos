@@ -26,6 +26,8 @@ public class Escorredor {
 			fim++;
 			fim %= maxPratos;
 
+			checarLimites();
+
 			logger.finer("Inserindo " + prato);
 
 			if (ocupacao == 1) notifyAll();
@@ -51,6 +53,8 @@ public class Escorredor {
 			inicio++;
 			inicio %= maxPratos;
 
+			checarLimites();
+
 			logger.finer("Retirando " + prato);
 
 			if (ocupacao == maxPratos - 1) notifyAll();
@@ -61,6 +65,11 @@ public class Escorredor {
 		}
 
 		return prato;
+	}
+	
+	private void checarLimites() {
+		if (ocupacao < 0 || ocupacao > maxPratos)
+			throw new LimiteVioladoException("Limites do escorredor foram violados. Ocupação atual = " + ocupacao);
 	}
 
 	private boolean isVazio() {
